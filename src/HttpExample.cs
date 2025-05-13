@@ -25,22 +25,16 @@ namespace My.Function
         //     return new OkObjectResult("Welcome Mike to Azure Functions!");
         // }
  
-        [Function("httpget")]
-        public static OutputType Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] 
-            HttpRequestData req, 
-            FunctionContext executionContext)
+        [Function("HttpExample")]
+        public OutputType Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] 
+            HttpRequest req)
     {
-        var logger = executionContext.GetLogger("HttpExample");
-        logger.LogInformation("C# HTTP trigger function processed a request.");
+        _logger.LogInformation("C# HTTP trigger function processed a request.");
 
         var message = "Welcome to Azure Functions!";
-
-        var response = req.CreateResponse(HttpStatusCode.OK);
-        response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
-        response.WriteStringAsync(message);
-
+         
         // Return a response to both HTTP trigger and Azure SQL output binding.
-        return new OutputType()
+        return new OutputType
         {
             ToDoItem = new ToDoItem
             {
@@ -49,7 +43,7 @@ namespace My.Function
                 completed = false,
                 url = ""
             },
-            HttpResponse = response
+            HttpResponse = new OkObjectResult("Welcome to Azure Functions!")
         };
 }
     }
@@ -59,6 +53,6 @@ namespace My.Function
         [SqlOutput("dbo.ToDo", connectionStringSetting: "SqlConnectionString")]
         public required ToDoItem ToDoItem { get; set; }
         [HttpResult]
-        public required HttpResponseData HttpResponse { get; set; }
+        public required IActionResult HttpResponse { get; set; }
     }
 }

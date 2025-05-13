@@ -2,6 +2,10 @@ using System;
 
 namespace AzureSQL.ToDo
 {
+
+    
+    //public record Person([property: JsonPropertyName("name")] string Name, [property: JsonPropertyName("age")] int Age);
+
     public class ToDoItem
     {
         public Guid Id { get; set; }
